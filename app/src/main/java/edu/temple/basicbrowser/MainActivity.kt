@@ -1,6 +1,7 @@
 package edu.temple.basicbrowser
 
 import android.content.DialogInterface
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.webkit.WebView
@@ -24,12 +25,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        CoroutineScope(Dispatchers.IO).launch {
-
-
-
-        }
-
 
 
 
@@ -42,6 +37,15 @@ class MainActivity : AppCompatActivity() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
             }
+
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                super.onPageStarted(view, url, favicon)
+
+                url?.run{
+                    urlEditText.setText(this)
+                }
+
+            }
         }
 
         goButton.setOnClickListener {
@@ -51,8 +55,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun parseUrl(url: String): String {
-        if (url.startsWith("https"))
+        if (url.startsWith("https://"))
             return url
-        return ""
+        else
+            return "https://${url}"
     }
 }
